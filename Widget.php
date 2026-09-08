@@ -21,7 +21,7 @@ use Zabbix\Core\CWidget;
 class Widget extends CWidget {
 
 	public function getDefaultName(): string {
-		return _('Honeycomb');
+		return _('Honeycomb_with_filter');
 	}
 
 	public function getTranslationStrings(): array {

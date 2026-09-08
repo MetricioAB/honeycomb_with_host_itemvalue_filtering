@@ -1,0 +1,48 @@
+{
+	"manifest_version": 2.0,
+	"id": "honeycomb_with_filter",
+	"type": "widget",
+	"name": "Honeycomb with HostItem Filter",
+	"namespace": "Honeycomb_with_filter",
+	"version": "1.0",
+	"author": "Metricio AB",
+	"description": "Displays item values as a honeycomb. Additional filtering with specific item values",
+	"url": "web_interface/frontend_sections/dashboards/widgets/honeycomb_with_filter",
+	"widget": {
+		"size": {
+			"width": 24,
+			"height": 5
+		},
+		"js_class": "CWidgetHoneycomb",
+		"in": {
+			"hostids": {
+				"type": "_hostids"
+			},
+			"groupids": {
+				"type": "_hostgroupids"
+			}
+		},
+		"out": [
+			{
+				"type": "_hostid"
+			},
+			{
+				"type": "_hostids"
+			},
+			{
+				"type": "_itemid"
+			},
+			{
+				"type": "_itemids"
+			}
+		]
+	},
+	"actions": {
+		"widget.honeycomb_with_filter.view": {
+			"class": "WidgetView"
+		}
+	},
+	"assets": {
+		"js": ["class.svghoneycomb.js", "class.widget.js"]
+	}
+}

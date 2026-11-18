@@ -16,9 +16,16 @@
 
 use Modules\Honeycomb_with_filter\Includes\WidgetForm;
 
+// Zabbix 7.4 and 8.0 use the JavaScript widget form lifecycle.
+$modern_form = method_exists(CWidgetFormView::class, 'initFormJs');
+
 ?>
 
+<?php if ($modern_form): ?>
+window.widget_form = new class extends CWidgetForm {
+<?php else: ?>
 window.widget_honeycomb_form = new class {
+<?php endif ?>
 
 	/**
 	 * @type {HTMLFormElement}
@@ -26,7 +33,11 @@ window.widget_honeycomb_form = new class {
 	#form;
 
 	init({thresholds_colors}) {
+<?php if ($modern_form): ?>
+		this.#form = this.getForm();
+<?php else: ?>
 		this.#form = document.getElementById('widget-dialogue-form');
+<?php endif ?>
 
 		colorPalette.setThemeColors(thresholds_colors);
 
@@ -52,6 +63,7 @@ window.widget_honeycomb_form = new class {
 			}
 		});
 
+<?php if (!$modern_form): ?>
 		for (const colorpicker of this.#form.querySelectorAll('.<?= ZBX_STYLE_COLOR_PICKER ?> input')) {
 			$(colorpicker).colorpicker({
 				appendTo: '.overlay-dialogue-body',
@@ -59,7 +71,12 @@ window.widget_honeycomb_form = new class {
 			});
 		}
 
+<?php endif ?>
+
 		this.#updateForm();
+<?php if ($modern_form): ?>
+		this.ready();
+<?php endif ?>
 	}
 
 	#updateForm() {

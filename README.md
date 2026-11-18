@@ -5,7 +5,7 @@
 
 ## Förutsättningar
 
-- Zabbix 7.0 (ej testad på senare versioner)
+- Målversioner: Zabbix 7.0, 7.4 och 8.0. Anpassningen har jämförts med originalkoden för 7.4.16 och grenen `release/8.0` (vid kontrollen märkt 8.0.1rc1). Integrationstest i Zabbix återstår.
 - Åtkomst till Zabbix-serverns filsystem
 - Administratörsåtkomst i Zabbix webbgränssnitt
 
@@ -54,3 +54,23 @@ Om något matchande filteritem på en host har det angivna senaste värdet dölj
 - Jämförelsen använder råvärdet, före value mapping och enhetsformatering. Numeriska items jämförs numeriskt (`0` matchar `0.0`); text/logg jämförs exakt och skiftlägeskänsligt.
 - Endast aktiva filteritems med numeriska, text- eller loggvärden används.
 - Saknas filteritem eller historik inom Zabbix inställda historikperiod för senaste värden behålls hosten.
+
+
+## Kompatibilitet och verifiering
+
+Inställningsformuläret väljer automatiskt initiering efter tillgängligt Zabbix-API. I 7.0 används den äldre jQuery-färgväljaren. I 7.4 och 8.0 används formulärlivscykeln med `CWidgetForm`, `initFormJs()` och `ready()`; den borttagna konstanten `ZBX_STYLE_COLOR_PICKER` utvärderas inte där.
+
+Vid uppdatering ska `Widget.php`, `views/widget.edit.php`, `views/widget.edit.js.php` och `includes/WidgetForm.php` ersättas tillsammans. Ladda sedan om dashboardsidan.
+
+Verifiera i 7.0, 7.4.16 och den installerade 8.0-versionen att:
+
+- En ny och en befintlig widget kan öppnas, sparas och öppnas igen.
+- Färger för primär/sekundär etikett, bakgrund och tröskelvärden kan ändras och sparas.
+- Tröskelrader kan läggas till/tas bort och färginterpolering fungerar.
+- Etikettinställningar visas/döljs och hostfiltret fortsätter fungera.
+
+Kör `php tests/host_filter.php` och `php tests/form_compatibility.php` där PHP finns. Det senare testet renderar formulärets JavaScript med simulerade 7.0-, 7.4- och 8.0-klasser; det ersätter inte test i Zabbix.
+
+Färgfälten för etiketter och bakgrund tillåter ärvda standardfärger via `allowInherited()` när metoden finns (7.4/8.0). I 7.0 behålls den äldre färgväljarens hantering.
+
+Tröskelvärdenas färgpalett definieras i modulens egen `Widget.php`. Det undviker beroendet till `CWidgetFieldColumnsList`, som saknas i nyare installationer. Kopiera alltid `Widget.php` tillsammans med den uppdaterade formulärvyn.

@@ -66,7 +66,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 		}
 
 		$groupids = null;
-		$evaltype = null;
+		$evaltype = TAG_EVAL_TYPE_AND_OR;
 		$tags = null;
 
 		if (!$this->isTemplateDashboard()) {
@@ -75,7 +75,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			}
 
 			if ($this->fields_values['host_tags']) {
-				$evaltype = $this->fields_values['evaltype_host'];
+				$evaltype = (int) ($this->fields_values['evaltype_host'] ?? TAG_EVAL_TYPE_AND_OR);
 				$tags = $this->fields_values['host_tags'];
 			}
 		}
@@ -111,7 +111,7 @@ class WidgetView extends CControllerDashboardWidgetView {
 			'selectHosts' => ['name'],
 			'webitems' => true,
 			'hostids' => $hostids,
-			'evaltype' => $this->fields_values['evaltype_item'],
+			'evaltype' => (int) ($this->fields_values['evaltype_item'] ?? TAG_EVAL_TYPE_AND_OR),
 			'tags' => $this->fields_values['item_tags'] ?: null,
 			'selectValueMap' => ['mappings'],
 			'searchWildcardsEnabled' => true,

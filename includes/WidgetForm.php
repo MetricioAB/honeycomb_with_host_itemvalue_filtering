@@ -147,7 +147,7 @@ class WidgetForm extends CWidgetForm {
 				new CWidgetFieldCheckBox('primary_label_bold', _('Bold'))
 			)
 			->addField(
-				(new CWidgetFieldColor('primary_label_color', _('Color')))->prefixLabel(_('Primary label'))
+				($this->makeColorField('primary_label_color', _('Color')))->prefixLabel(_('Primary label'))
 			)
 			->addField(
 				(new CWidgetFieldCheckBox('primary_label_units_show'))->setDefault(1)
@@ -194,7 +194,7 @@ class WidgetForm extends CWidgetForm {
 				(new CWidgetFieldCheckBox('secondary_label_bold', _('Bold')))->setDefault(1)
 			)
 			->addField(
-				(new CWidgetFieldColor('secondary_label_color', _('Color')))->prefixLabel(_('Secondary label'))
+				($this->makeColorField('secondary_label_color', _('Color')))->prefixLabel(_('Secondary label'))
 			)
 			->addField(
 				(new CWidgetFieldCheckBox('secondary_label_units_show'))->setDefault(1)
@@ -209,7 +209,7 @@ class WidgetForm extends CWidgetForm {
 				]))->setDefault(self::UNITS_POSITION_AFTER)
 			)
 			->addField(
-				new CWidgetFieldColor('bg_color', _('Background color'))
+				$this->makeColorField('bg_color', _('Background color'))
 			)
 			->addField(
 				new CWidgetFieldCheckBox('interpolation', _('Color interpolation'))
@@ -217,6 +217,17 @@ class WidgetForm extends CWidgetForm {
 			->addField(
 				new CWidgetFieldThresholds('thresholds', _('Thresholds'))
 			);
+	}
+
+	private function makeColorField(string $name, string $label): CWidgetFieldColor {
+		$field = new CWidgetFieldColor($name, $label);
+
+		// 7.4 and 8.0 expose inherited colors through the field; 7.0 uses the jQuery picker.
+		if (method_exists($field, 'allowInherited')) {
+			$field->allowInherited();
+		}
+
+		return $field;
 	}
 
 	public function validate(bool $strict = false): array {

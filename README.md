@@ -15,7 +15,7 @@
 
 Kopiera mappen `/honeycomb_with_host_item_filter/` till Zabbix modulkatalog.
 
-Sökvägen kan variera beroende på installation. Standardplatsen för Zabbix moduler är `/usr/share/zabbix/modules/`.
+Sökvägen kan variera beroende på installation. Standardplatsen för Zabbix 7.0 moduler är `/usr/share/zabbix/modules/`, för 7.4 och 8.0 är den `/usr/share/zabbix/ui/modules/`
 
 Kontrollera att strukturen blir följande, utan en extra nästlad projektkatalog:
 
